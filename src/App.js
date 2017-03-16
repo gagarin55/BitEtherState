@@ -81,7 +81,6 @@ class App extends Component {
             const events = contract.allEvents({fromBlock: 2700000/*2726892*/, toBlock: 'latest'});
             events.get(function (error, logs) {
                 console.log('Got ' + logs.length + ' events');
-                console.log(logs);
                 self.setState({events: logs, fetching: false});
             });
         }).catch(error => {
