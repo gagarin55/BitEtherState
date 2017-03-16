@@ -33,7 +33,7 @@ class App extends Component {
 
     buildState(events) {
         const applyEvent = (state, event) => {
-            const value = new BigNumber(event.args._value);
+            const value = event.args._value;
             switch (event.event) {
                 case 'Reward':
                     const address = event.args._miner;
@@ -53,7 +53,7 @@ class App extends Component {
             return state;
         };
 
-        events = events.filter(e => e.event === 'Reward' || e.event === 'Transfer');
+        events = events.filter(e => ((e.event === 'Reward') && e.args._current) || e.event === 'Transfer');
         let state = new Immutable.Map();
         events.forEach(e => {
             state = applyEvent(state, e);
@@ -78,9 +78,10 @@ class App extends Component {
         }).then((balance) => {
             self.setState({satoshiBalance: balance});
         }).then(() => {
-            const events = contract.allEvents({fromBlock: 2726892, toBlock: 'latest'});
+            const events = contract.allEvents({fromBlock: 2700000/*2726892*/, toBlock: 'latest'});
             events.get(function (error, logs) {
                 console.log('Got ' + logs.length + ' events');
+                console.log(logs);
                 self.setState({events: logs, fetching: false});
             });
         }).catch(error => {
