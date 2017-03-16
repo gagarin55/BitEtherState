@@ -45,14 +45,13 @@ class App extends Component {
                     const from = event.args._from;
                     const to = event.args._to;
                     const currentFromBalance = state.get(from, new BigNumber(0));
-                    const currentToBalance = state.get(to, new BigNumber(0));
                     state = state.set(from, currentFromBalance.sub(value));
+                    const currentToBalance = state.get(to, new BigNumber(0));
                     state = state.set(to, currentToBalance.add(value));
                     break;
             }
             return state;
         };
-
         events = events.filter(e => ((e.event === 'Reward') && e.args._current) || e.event === 'Transfer');
         let state = new Immutable.Map();
         events.forEach(e => {
